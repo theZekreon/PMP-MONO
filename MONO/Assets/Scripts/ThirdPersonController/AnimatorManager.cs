@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class AnimatorManager : MonoBehaviour
 {
-    Animator _animator;
+    public Animator Animator;
     int _horizontal;
     int _vertical;
 
     void Awake()
     {
-        _animator = GetComponent<Animator>();
+        Animator = GetComponent<Animator>();
 
         // Referencing animator values for horizontal and vertical (parameters below)
         _horizontal = Animator.StringToHash("Horizontal");
@@ -17,8 +17,8 @@ public class AnimatorManager : MonoBehaviour
 
     public void PlayTargetAnimation(string targetAnimation, bool isInteracting)
     {
-        _animator.SetBool("isInteracting", isInteracting);
-        _animator.CrossFade(targetAnimation, 0.2f);
+        Animator.SetBool("isInteracting", isInteracting);
+        Animator.CrossFade(targetAnimation, 0.2f);
     }
 
     public void UpdateAnimatorValues(float horizontalMovement, float verticalMovement, bool isSprinting)
@@ -80,7 +80,7 @@ public class AnimatorManager : MonoBehaviour
             snappedVertical = 2;
         }
 
-        _animator.SetFloat(_horizontal, snappedHorizontal, 0.1f, Time.deltaTime);
-        _animator.SetFloat(_vertical, snappedVertical, 0.1f, Time.deltaTime);
+        Animator.SetFloat(_horizontal, snappedHorizontal, 0.1f, Time.deltaTime);
+        Animator.SetFloat(_vertical, snappedVertical, 0.1f, Time.deltaTime);
     }
 }

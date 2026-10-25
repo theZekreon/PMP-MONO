@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerLocomotion : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class PlayerLocomotion : MonoBehaviour
     [Header("Movement Flags")]
     public bool IsSprinting;
     public bool IsGrounded;
+    public bool IsJumping;
 
     [Header("Falling")]
     [SerializeField] float _inAirTimer;
@@ -26,6 +28,10 @@ public class PlayerLocomotion : MonoBehaviour
     [SerializeField] float _runningSpeed = 5f;
     [SerializeField] float _sprintingSpeed = 7f;
     [SerializeField] float _rotationSpeed = 15f;
+
+    [Header("Jump Speeds")]
+    [SerializeField] float _jumpHeight = 3f;
+    [SerializeField] float _gravityIntensity = -15f;
 
     void Awake()
     {
@@ -49,14 +55,15 @@ public class PlayerLocomotion : MonoBehaviour
 
     void HandleMovement()
     {
+        // Prevents moving while in air (can be tweaked for new mechanics)
+        //if (IsJumping)  
+        //    return;
+
         _moveDirection = _cameraObject.forward * _inputManager.VerticalInput;
         _moveDirection += _cameraObject.right * _inputManager.HorizontalInput;
         _moveDirection.Normalize();
         _moveDirection.y = 0; // Prevents player from walking into the air   
 
-        // If the player is walking, select the walking speed
-        // If the player is running, select the running speed
-        // If the player is sprinting, select the sprinting speed
         if (IsSprinting)
         {
             _moveDirection *= _sprintingSpeed;
@@ -74,11 +81,16 @@ public class PlayerLocomotion : MonoBehaviour
         }
 
         Vector3 movementVelocity = _moveDirection;
+        movementVelocity.y = _playerRigidbody.linearVelocity.y;
         _playerRigidbody.linearVelocity = movementVelocity;
+
     }
 
     void HandleRotation()
     {
+        //if (IsJumping) 
+        //    return;
+
         Vector3 targetDirection = Vector3.zero; // Zero on all values
 
         targetDirection = _cameraObject.forward * _inputManager.VerticalInput;
@@ -100,7 +112,7 @@ public class PlayerLocomotion : MonoBehaviour
         Vector3 raycastOrigin = transform.position;
         raycastOrigin.y += _raycastHeightOffset;
 
-        if (!IsGrounded)
+        if (!IsGrounded && !IsJumping)
         {
             if (!_playerManager.IsInteracting)
             {
@@ -121,10 +133,26 @@ public class PlayerLocomotion : MonoBehaviour
 
             _inAirTimer = 0;
             IsGrounded = true;
+            IsJumping = false;
         }
         else 
         { 
             IsGrounded = false;
+        }
+    }
+
+    public void HandleJumping()
+    {
+        if (IsGrounded) 
+        {
+            _animatorManager.Animator.SetBool("isJumping", true);
+            _animatorManager.PlayTargetAnimation("Jumping", false);
+
+            // Keep running velocity + add velocity of the jump
+            float jumpingVelocity = Mathf.Sqrt(-2 * _gravityIntensity * _jumpHeight);
+            Vector3 playerVelocity = _moveDirection;
+            playerVelocity.y = jumpingVelocity;
+            _playerRigidbody.linearVelocity = playerVelocity;
         }
     }
 }

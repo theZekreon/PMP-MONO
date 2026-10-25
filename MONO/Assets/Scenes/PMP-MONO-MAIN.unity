@@ -9719,23 +9719,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1081339080945778294, guid: 3cf6650ff4b90b2498c65d1d9c782c9e, type: 3}
       propertyPath: _leapingVelocity
-      value: 3
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1081339080945778294, guid: 3cf6650ff4b90b2498c65d1d9c782c9e, type: 3}
       propertyPath: _groundLayer.m_Bits
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3820110325539968419, guid: 3cf6650ff4b90b2498c65d1d9c782c9e, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7197859195480264665, guid: 3cf6650ff4b90b2498c65d1d9c782c9e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -27.26
+      value: 98.85
       objectReference: {fileID: 0}
     - target: {fileID: 7197859195480264665, guid: 3cf6650ff4b90b2498c65d1d9c782c9e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 62.63
+      value: 44.64
       objectReference: {fileID: 0}
     - target: {fileID: 7197859195480264665, guid: 3cf6650ff4b90b2498c65d1d9c782c9e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -44.08
+      value: -1.49
       objectReference: {fileID: 0}
     - target: {fileID: 7197859195480264665, guid: 3cf6650ff4b90b2498c65d1d9c782c9e, type: 3}
       propertyPath: m_LocalRotation.w
