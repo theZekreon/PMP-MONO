@@ -8,8 +8,13 @@ public class PlayerLocomotion : MonoBehaviour
     Transform _cameraObject;
     Rigidbody _playerRigidbody;
 
-    [SerializeField] float _movementSpeed = 7f;
+    [Header("Movement Speeds")]
+    [SerializeField] float _walkingSpeed = 1.5f;
+    [SerializeField] float _runningSpeed = 5f;
+    [SerializeField] float _sprintingSpeed = 7f;
     [SerializeField] float _rotationSpeed = 15f;
+
+    public bool IsSprinting;
 
     void Awake()
     {
@@ -26,11 +31,29 @@ public class PlayerLocomotion : MonoBehaviour
 
     void HandleMovement()
     {
-        _moveDirection = _cameraObject.forward * _inputManager._verticalInput;
-        _moveDirection += _cameraObject.right * _inputManager._horizontalInput;
+        _moveDirection = _cameraObject.forward * _inputManager.VerticalInput;
+        _moveDirection += _cameraObject.right * _inputManager.HorizontalInput;
         _moveDirection.Normalize();
         _moveDirection.y = 0; // Prevents player from walking into the air   
-        _moveDirection *= _movementSpeed;
+
+        // If the player is walking, select the walking speed
+        // If the player is running, select the running speed
+        // If the player is sprinting, select the sprinting speed
+        if (IsSprinting)
+        {
+            _moveDirection *= _sprintingSpeed;
+        }
+        else
+        {
+            if (_inputManager.MoveAmount >= 0.5f)
+            {
+                _moveDirection *= _runningSpeed;
+            }
+            else
+            {
+                _moveDirection *= _walkingSpeed;
+            }
+        }
 
         Vector3 movementVelocity = _moveDirection;
         _playerRigidbody.linearVelocity = movementVelocity;
@@ -40,8 +63,8 @@ public class PlayerLocomotion : MonoBehaviour
     {
         Vector3 targetDirection = Vector3.zero; // Zero on all values
 
-        targetDirection = _cameraObject.forward * _inputManager._verticalInput;
-        targetDirection += _cameraObject.right * _inputManager._horizontalInput;
+        targetDirection = _cameraObject.forward * _inputManager.VerticalInput;
+        targetDirection += _cameraObject.right * _inputManager.HorizontalInput;
         targetDirection.Normalize();
         targetDirection.y = 0;
 

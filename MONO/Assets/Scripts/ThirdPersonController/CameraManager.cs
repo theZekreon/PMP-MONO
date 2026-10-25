@@ -8,6 +8,7 @@ public class CameraManager : MonoBehaviour
     [SerializeField] Transform _cameraPivot; // The object the camera uses to pivot (look up and down)
     [SerializeField] Transform _cameraTransform; // The transform of the actual camera object in the scene
     [SerializeField] LayerMask _collisionLayers; // The layers we want our layers to collide with
+
     float _defaultPosition;
     Vector3 _cameraFollowVelocity = Vector3.zero;
     Vector3 _cameraVectorPosition;
@@ -47,8 +48,8 @@ public class CameraManager : MonoBehaviour
 
     void RotateCamera()
     {
-        _lookAngle += (_inputManager._cameraInputX * _cameraLookSpeed);
-        _pivotAngle -= (_inputManager._cameraInputY * _cameraPivotSpeed);
+        _lookAngle += (_inputManager.CameraInputX * _cameraLookSpeed);
+        _pivotAngle -= (_inputManager.CameraInputY * _cameraPivotSpeed);
         _pivotAngle = Mathf.Clamp(_pivotAngle, _minimumPivotAngle, _maximumPivotAngle);
 
         Vector3 rotation;

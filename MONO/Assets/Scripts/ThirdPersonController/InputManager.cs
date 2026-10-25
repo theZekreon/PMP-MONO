@@ -4,21 +4,25 @@ public class InputManager : MonoBehaviour
 {
     // Calls the PlayerControls script that was made with Unity's input system
     PlayerControls _playerControls;
+    PlayerLocomotion _playerLocomotion;
     AnimatorManager _animatorManager;
 
-    public Vector2 _movementInput;
-    public Vector3 _cameraInput;
+    public Vector2 MovementInput;
+    public Vector3 CameraInput;
 
-    public float _cameraInputX;
-    public float _cameraInputY;
+    public float CameraInputX;
+    public float CameraInputY;
 
-    float _moveAmount;
-    public float _horizontalInput;
-    public float _verticalInput;
+    public float MoveAmount;
+    public float HorizontalInput;
+    public float VerticalInput;
+
+    public bool SprintInput;
 
     void Awake()
     {
         _animatorManager = GetComponent<AnimatorManager>();
+        _playerLocomotion = GetComponent<PlayerLocomotion>();
     }
 
     void OnEnable()
@@ -27,8 +31,11 @@ public class InputManager : MonoBehaviour
         {
             _playerControls = new PlayerControls();
 
-            _playerControls.PlayerMovement.Movement.performed += i => _movementInput = i.ReadValue<Vector2>();
-            _playerControls.PlayerMovement.Camera.performed += i => _cameraInput = i.ReadValue<Vector2>();
+            _playerControls.PlayerMovement.Movement.performed += i => MovementInput = i.ReadValue<Vector2>();
+            _playerControls.PlayerMovement.Camera.performed += i => CameraInput = i.ReadValue<Vector2>();
+
+            _playerControls.PlayerActions.Sprint.performed += i => SprintInput = true;
+            _playerControls.PlayerActions.Sprint.canceled += i => SprintInput = false;
         }
 
         _playerControls.Enable();
@@ -42,17 +49,30 @@ public class InputManager : MonoBehaviour
     public void HandleAllInputs()
     {
         HandleMovementInput();
+        HandleSprintingInput();
     }
 
     void HandleMovementInput()
     {
-        _horizontalInput = _movementInput.x;
-        _verticalInput = _movementInput.y;
+        HorizontalInput = MovementInput.x;
+        VerticalInput = MovementInput.y;
 
-        _cameraInputX = _cameraInput.x;
-        _cameraInputY = _cameraInput.y;
+        CameraInputX = CameraInput.x;
+        CameraInputY = CameraInput.y;
 
-        _moveAmount = Mathf.Clamp01(Mathf.Abs(_horizontalInput) + Mathf.Abs(_verticalInput)); // Abs takes away sign in front of the value
-        _animatorManager.UpdateAnimatorValues(0, _moveAmount);
+        MoveAmount = Mathf.Clamp01(Mathf.Abs(HorizontalInput) + Mathf.Abs(VerticalInput)); // Abs takes away sign in front of the value
+        _animatorManager.UpdateAnimatorValues(0, MoveAmount, _playerLocomotion.IsSprinting);
+    }
+
+    void HandleSprintingInput()
+    {
+        if (SprintInput && MoveAmount > 0.5f)
+        {
+            _playerLocomotion.IsSprinting = true;
+        }
+        else
+        {
+            _playerLocomotion.IsSprinting = false;
+        }
     }
 }
