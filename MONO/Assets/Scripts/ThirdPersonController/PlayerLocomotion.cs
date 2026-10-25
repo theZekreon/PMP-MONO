@@ -2,11 +2,24 @@ using UnityEngine;
 
 public class PlayerLocomotion : MonoBehaviour
 {
+    PlayerManager _playerManager;
     InputManager _inputManager;
+    AnimatorManager _animatorManager;
 
     Vector3 _moveDirection;
     Transform _cameraObject;
     Rigidbody _playerRigidbody;
+
+    [Header("Movement Flags")]
+    public bool IsSprinting;
+    public bool IsGrounded;
+
+    [Header("Falling")]
+    [SerializeField] float _inAirTimer;
+    [SerializeField] float _leapingVelocity;
+    [SerializeField] float _fallingVelocity;
+    [SerializeField] float _raycastHeightOffset = 0.5f;
+    [SerializeField] LayerMask _groundLayer;
 
     [Header("Movement Speeds")]
     [SerializeField] float _walkingSpeed = 1.5f;
@@ -14,17 +27,22 @@ public class PlayerLocomotion : MonoBehaviour
     [SerializeField] float _sprintingSpeed = 7f;
     [SerializeField] float _rotationSpeed = 15f;
 
-    public bool IsSprinting;
-
     void Awake()
     {
+        _playerManager = GetComponent<PlayerManager>();
         _inputManager = GetComponent<InputManager>();
+        _animatorManager = GetComponent<AnimatorManager>();
         _playerRigidbody = GetComponent<Rigidbody>();
         _cameraObject = Camera.main.transform;
     }
 
     public void HandleAllMovement()
     {
+        HandleFallingAndLanding();
+        
+        if (_playerManager.IsInteracting)
+            return;
+
         HandleMovement();
         HandleRotation();
     }
@@ -74,5 +92,39 @@ public class PlayerLocomotion : MonoBehaviour
         Quaternion playerRotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime); 
 
         transform.rotation = playerRotation;
+    }
+
+    void HandleFallingAndLanding()
+    {
+        RaycastHit hit;
+        Vector3 raycastOrigin = transform.position;
+        raycastOrigin.y += _raycastHeightOffset;
+
+        if (!IsGrounded)
+        {
+            if (!_playerManager.IsInteracting)
+            {
+                _animatorManager.PlayTargetAnimation("Falling", true);
+            }
+
+            _inAirTimer += Time.deltaTime;
+            _playerRigidbody.AddForce(transform.forward * _leapingVelocity);
+            _playerRigidbody.AddForce(-Vector3.up * _fallingVelocity * _inAirTimer);
+        }
+
+        if (Physics.SphereCast(raycastOrigin, 0.2f, -Vector3.up, out hit, _groundLayer))
+        {
+            if (!IsGrounded && _playerManager.IsInteracting)
+            {
+                _animatorManager.PlayTargetAnimation("Landing", true);
+            }
+
+            _inAirTimer = 0;
+            IsGrounded = true;
+        }
+        else 
+        { 
+            IsGrounded = false;
+        }
     }
 }

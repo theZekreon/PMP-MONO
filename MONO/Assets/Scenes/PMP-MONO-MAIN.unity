@@ -9709,17 +9709,33 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1081339080945778294, guid: 3cf6650ff4b90b2498c65d1d9c782c9e, type: 3}
+      propertyPath: IsGrounded
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1081339080945778294, guid: 3cf6650ff4b90b2498c65d1d9c782c9e, type: 3}
+      propertyPath: _fallingVelocity
+      value: 33
+      objectReference: {fileID: 0}
+    - target: {fileID: 1081339080945778294, guid: 3cf6650ff4b90b2498c65d1d9c782c9e, type: 3}
+      propertyPath: _leapingVelocity
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1081339080945778294, guid: 3cf6650ff4b90b2498c65d1d9c782c9e, type: 3}
+      propertyPath: _groundLayer.m_Bits
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7197859195480264665, guid: 3cf6650ff4b90b2498c65d1d9c782c9e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.1869116
+      value: -27.26
       objectReference: {fileID: 0}
     - target: {fileID: 7197859195480264665, guid: 3cf6650ff4b90b2498c65d1d9c782c9e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 40.04
+      value: 62.63
       objectReference: {fileID: 0}
     - target: {fileID: 7197859195480264665, guid: 3cf6650ff4b90b2498c65d1d9c782c9e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.089501
+      value: -44.08
       objectReference: {fileID: 0}
     - target: {fileID: 7197859195480264665, guid: 3cf6650ff4b90b2498c65d1d9c782c9e, type: 3}
       propertyPath: m_LocalRotation.w
