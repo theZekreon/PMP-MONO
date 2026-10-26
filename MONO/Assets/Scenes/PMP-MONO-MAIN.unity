@@ -1035,6 +1035,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5801713737548382470, guid: a51235862da83694d9f70e4faa810561, type: 3}
+      propertyPath: _cameraCollisionRadius
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5801713737548382470, guid: a51235862da83694d9f70e4faa810561, type: 3}
       propertyPath: _collisionLayers.m_Bits
       value: 1
       objectReference: {fileID: 0}
@@ -14873,6 +14877,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3820110325539968419, guid: 3cf6650ff4b90b2498c65d1d9c782c9e, type: 3}
       propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4564527571304850705, guid: 3cf6650ff4b90b2498c65d1d9c782c9e, type: 3}
+      propertyPath: m_Height
+      value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4564527571304850705, guid: 3cf6650ff4b90b2498c65d1d9c782c9e, type: 3}
+      propertyPath: m_Center.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6289185967085917571, guid: 3cf6650ff4b90b2498c65d1d9c782c9e, type: 3}
+      propertyPath: m_UseGravity
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7197859195480264665, guid: 3cf6650ff4b90b2498c65d1d9c782c9e, type: 3}

@@ -110,7 +110,9 @@ public class PlayerLocomotion : MonoBehaviour
     {
         RaycastHit hit;
         Vector3 raycastOrigin = transform.position;
+        Vector3 targetPosition; // For stairs and slopes
         raycastOrigin.y += _raycastHeightOffset;
+        targetPosition = transform.position;
 
         if (!IsGrounded && !IsJumping)
         {
@@ -128,16 +130,38 @@ public class PlayerLocomotion : MonoBehaviour
         {
             if (!IsGrounded && _playerManager.IsInteracting)
             {
-                _animatorManager.PlayTargetAnimation("Landing", true);
+                // True = player locks movement after landing,
+                // False = player can move immediately after landing
+                _animatorManager.PlayTargetAnimation("Landing", false);
             }
 
+            Vector3 raycastHitpoint = hit.point;
+            targetPosition.y = raycastHitpoint.y;
             _inAirTimer = 0;
             IsGrounded = true;
-            IsJumping = false;
+            //IsJumping = false;
+
+            // isJumping is read back from the animator every LateUpdate, so reset it there
+            if (IsJumping && _playerRigidbody.linearVelocity.y <= 0)
+            {
+                _animatorManager.Animator.SetBool("isJumping", false);
+            }
         }
         else 
         { 
             IsGrounded = false;
+        }
+
+        if (IsGrounded && !IsJumping)
+        {
+            if (_playerManager.IsInteracting || _inputManager.MoveAmount > 0)
+            {
+                transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime / 0.1f);
+            }
+            else
+            {
+                transform.position = targetPosition;
+            }
         }
     }
 
